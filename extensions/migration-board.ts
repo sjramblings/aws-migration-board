@@ -1197,7 +1197,7 @@ export default function (pi: ExtensionAPI) {
 
 		// Detect memo write — finalize the meeting
 		if (meetingActive && !meetingComplete && (toolName === "write" || toolName === "edit")) {
-			if (memoPath && (resolvedTarget === memoPath || resolvedTarget.endsWith("/memo.md") || resolvedTarget.endsWith("/proposal.html"))) {
+			if (memoPath && resolvedTarget.endsWith("/proposal.html")) {
 				meetingComplete = true;
 				finalElapsedMinutes = (Date.now() - meetingStartTime) / 60000;
 
@@ -1437,7 +1437,11 @@ export default function (pi: ExtensionAPI) {
 						`**Constraints:** ${config.meeting.constraints.min_time_minutes}-${config.meeting.constraints.max_time_minutes} min, $${config.meeting.constraints.min_budget}-$${config.meeting.constraints.max_budget}\n\n` +
 						`**Memo Path:** ${memoPath}\n\n` +
 						`After updating your scratch pad, use \`converse(to, message)\` to engage the board. Frame the decision clearly.\n\n` +
-						`Remember: update your scratch pad after EACH converse round with shifting positions, tensions, and your evolving thesis.`,
+						`Remember: update your scratch pad after EACH converse round with shifting positions, tensions, and your evolving thesis.\n\n` +
+						`**Final output:** You MUST write TWO files when done:\n` +
+						`1. \`memo.md\` to ${memoPath}\n` +
+						`2. \`proposal.html\` to ${memoPath.replace("memo.md", "proposal.html")} — this is the client-facing deliverable\n` +
+						`The deliberation is NOT complete until both files are written.`,
 					display: true,
 				},
 				{ deliverAs: "followUp", triggerTurn: true },
