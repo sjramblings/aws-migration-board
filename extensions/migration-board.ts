@@ -1197,7 +1197,7 @@ export default function (pi: ExtensionAPI) {
 
 		// Detect memo write — finalize the meeting
 		if (meetingActive && !meetingComplete && (toolName === "write" || toolName === "edit")) {
-			if (memoPath && (resolvedTarget === memoPath || resolvedTarget.endsWith("/memo.md"))) {
+			if (memoPath && (resolvedTarget === memoPath || resolvedTarget.endsWith("/memo.md") || resolvedTarget.endsWith("/proposal.html"))) {
 				meetingComplete = true;
 				finalElapsedMinutes = (Date.now() - meetingStartTime) / 60000;
 
