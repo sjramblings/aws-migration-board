@@ -1,0 +1,11 @@
+{
+  "name": "aws-migration-board",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AWS Migration Board — Multi-Agent Architecture Review System built on Pi Coding Agent",
+  "dependencies": {
+    "@mariozechner/pi-coding-agent": "latest",
+    "@mariozechner/pi-tui": "latest",
+    "@sinclair/typebox": "latest"
+  }
+}

@@ -1,0 +1,7 @@
+node_modules/
+.env
+bun.lock
+.pi/agent-sessions/
+.pi/migration-board/.pi/
+.pi/migration-board/deliberations/
+.pi/migration-board/proposals/
