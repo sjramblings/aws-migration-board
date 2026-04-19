@@ -1521,6 +1521,102 @@ export default function (pi: ExtensionAPI) {
 		}));
 	}
 
+	// ── /review Command ─────────────────────────
+
+	pi.registerCommand("review", {
+		description: "Review the latest deliberation and propose prompt improvements",
+		handler: async (args: string, ctx: any) => {
+			// Find the most recent deliberation directory
+			const delibBase = join(cwd, config.paths.deliberations);
+			const proposalBase = join(cwd, config.paths.memos);
+
+			if (!existsSync(delibBase)) {
+				ctx.ui.notify("No deliberations found.", "error");
+				return;
+			}
+
+			const sessions = readdirSync(delibBase).sort().reverse();
+			if (sessions.length === 0) {
+				ctx.ui.notify("No deliberation sessions found.", "error");
+				return;
+			}
+
+			// Use arg to select session or default to most recent
+			let targetSession = sessions[0];
+			if (args && args.trim()) {
+				const match = sessions.find(s => s.includes(args.trim()));
+				if (match) targetSession = match;
+			}
+
+			const delibDir = join(delibBase, targetSession);
+			const proposalDir = join(proposalBase, targetSession);
+
+			// Load session files
+			const convPath = join(delibDir, "conversation.jsonl");
+			const toolPath = join(delibDir, "tool-use.jsonl");
+			const memoPath = join(proposalDir, "memo.md");
+			const htmlPath = join(proposalDir, "proposal.html");
+
+			const conversation = existsSync(convPath) ? readFileSync(convPath, "utf-8") : "NOT FOUND";
+			const toolUse = existsSync(toolPath) ? readFileSync(toolPath, "utf-8") : "NOT FOUND";
+			const memo = existsSync(memoPath) ? readFileSync(memoPath, "utf-8") : "NOT GENERATED";
+			const html = existsSync(htmlPath) ? "GENERATED" : "NOT GENERATED";
+
+			// Load the review prompt template
+			const reviewPromptPath = join(cwd, "..", "..", ".pi", "commands", "review.md");
+			const reviewPromptAlt = join(cwd, "../../.pi/commands/review.md");
+			let reviewPrompt = "";
+			for (const p of [reviewPromptPath, reviewPromptAlt, join(cwd, ".pi", "commands", "review.md")]) {
+				const resolved = resolve(p);
+				if (existsSync(resolved)) {
+					reviewPrompt = readFileSync(resolved, "utf-8");
+					break;
+				}
+			}
+
+			if (!reviewPrompt) {
+				// Fallback: use inline review instructions
+				reviewPrompt = "Analyse the deliberation session below. Assess agent participation, deliberation quality, prompt effectiveness, output completeness, and propose specific prompt improvements.";
+			}
+
+			// Send review context to the agent
+			pi.sendMessage(
+				{
+					customType: "review-session",
+					content: [
+						`**Reviewing deliberation session:** ${targetSession}`,
+						``,
+						reviewPrompt,
+						``,
+						`---`,
+						`## Session Artifacts`,
+						``,
+						`### conversation.jsonl`,
+						"```json",
+						conversation,
+						"```",
+						``,
+						`### tool-use.jsonl`,
+						"```json",
+						toolUse,
+						"```",
+						``,
+						`### memo.md`,
+						"```markdown",
+						memo,
+						"```",
+						``,
+						`### proposal.html: ${html}`,
+					].join("\n"),
+					display: true,
+				},
+				{ deliverAs: "followUp", triggerTurn: true },
+			);
+
+			ctx.ui.notify(`Reviewing session: ${targetSession}`, "info");
+		},
+	});
+
 	// ── Session End — finalize meeting ───────────
 
 	pi.on("session_end", async (_event: any, _ctx: any) => {
