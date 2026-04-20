@@ -1442,6 +1442,7 @@ export default function (pi: ExtensionAPI) {
 					customType: "deliberation-start",
 					content:
 						`**Deliberation started.** Session ${sessionId}.\n\n` +
+						`⚠️ **THIS SESSION'S BRIEF IS BELOW** — ignore any old brief content in your scratch pad. The scratch pad may contain notes from previous sessions; those are historical only.\n\n` +
 						scratchPadInstruction +
 						`**Brief:** ${selectedBrief}\n\n` +
 						briefContent + "\n\n" +
