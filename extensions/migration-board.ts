@@ -837,6 +837,13 @@ export default function (pi: ExtensionAPI) {
 			theme.fg("accent", `${Math.ceil(state.contextPct)}%`);
 		const ctxVisible = 1 + filled + (10 - filled) + 1 + 1 + `${Math.ceil(state.contextPct)}%`.length;
 
+		// Model label — strip provider prefix for compact display
+		const modelRaw = state.def.model || "default";
+		const modelShort = modelRaw.includes("/") ? modelRaw.split("/").pop()! : modelRaw;
+		const modelText = truncate(modelShort, w - 1);
+		const modelLine = theme.fg("dim", modelText);
+		const modelVisible = modelText.length;
+
 		const workRaw = state.lastWork || state.def.name;
 		const workText = truncate(workRaw, Math.min(50, w - 1));
 		const workLine = theme.fg("muted", workText);
@@ -860,6 +867,7 @@ export default function (pi: ExtensionAPI) {
 		return [
 			bord(top),
 			border(" " + nameStr, 1 + nameVisible),
+			border(" " + modelLine, 1 + modelVisible),
 			border(" " + statusLine, 1 + statusVisible),
 			border(" " + ctxBar, 1 + ctxVisible),
 			border(" " + workLine, 1 + workVisible),
