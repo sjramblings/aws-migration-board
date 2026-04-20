@@ -47,7 +47,7 @@ expertise:
     use-when: "Referencing the overall funding strategy and stacking approach"
     updatable: false
 skills: []
-model: openai/gpt-5.4
+model: openai-codex/gpt-5.4
 tools: converse,read,write,edit
 domain: []
 ---

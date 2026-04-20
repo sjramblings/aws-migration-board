@@ -667,10 +667,9 @@ export default function (pi: ExtensionAPI) {
 		const agentKey = state.def.name.toLowerCase().replace(/\s+/g, "-");
 		const agentSessionFile = join(sessionDir, `${agentKey}.json`);
 
-		// Don't pass --model — let subprocesses inherit Pi's default model+auth.
-		// Passing an explicit model like "openai/gpt-5.4" requires a separate
-		// API key for that provider. Omitting it uses whichever provider Pi
-		// authenticated with (e.g. openai-codex via OAuth).
+		// Pass --model from frontmatter if defined.
+		// Model IDs must use the correct provider prefix (e.g. openai-codex/gpt-5.4-mini,
+		// not openai/gpt-5.4-mini). Pi resolves auth per provider.
 		const args = [
 			"--mode", "json",
 			"-p",
@@ -679,6 +678,11 @@ export default function (pi: ExtensionAPI) {
 			"--append-system-prompt", systemPrompt,
 			"--session", agentSessionFile,
 		];
+
+		// Pass model from agent frontmatter
+		if (state.def.model) {
+			args.push("--model", state.def.model);
+		}
 
 		// Restrict board member tools from frontmatter
 		if (state.def.tools.length > 0) {

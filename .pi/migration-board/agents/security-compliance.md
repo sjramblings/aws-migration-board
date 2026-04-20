@@ -11,7 +11,7 @@ expertise:
     use-when: "Assessing network boundaries, data flows, and trust relationships"
     updatable: false
 skills: []
-model: openai/gpt-5.4
+model: openai-codex/gpt-5.4-mini
 tools: read,write
 domain: []
 ---

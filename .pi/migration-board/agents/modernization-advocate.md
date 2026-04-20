@@ -14,7 +14,7 @@ expertise:
     use-when: "Comparing EC2 self-managed costs against managed service alternatives"
     updatable: false
 skills: []
-model: openai/gpt-5.4
+model: openai-codex/gpt-5.4-mini
 tools: read,write
 domain: []
 ---

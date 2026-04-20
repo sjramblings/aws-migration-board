@@ -14,7 +14,7 @@ expertise:
     use-when: "Assessing workload availability requirements and current SLA baselines"
     updatable: false
 skills: []
-model: openai/gpt-5.4
+model: openai-codex/gpt-5.4-mini
 tools: read,write
 domain: []
 ---

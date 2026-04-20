@@ -17,7 +17,7 @@ expertise:
     use-when: "Understanding workload characteristics that affect migration approach"
     updatable: false
 skills: []
-model: openai/gpt-5.4
+model: openai-codex/gpt-5.4-mini
 tools: read,write
 domain: []
 ---

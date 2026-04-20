@@ -14,7 +14,7 @@ expertise:
     use-when: "Calculating break-even analysis for commitment vs on-demand pricing"
     updatable: false
 skills: []
-model: openai/gpt-5.4
+model: openai-codex/gpt-5.4-mini
 tools: read,write
 domain: []
 ---

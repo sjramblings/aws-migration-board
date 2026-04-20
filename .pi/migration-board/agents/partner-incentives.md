@@ -11,7 +11,7 @@ expertise:
     use-when: "Understanding the customer's AWS relationship and partner engagement history"
     updatable: false
 skills: []
-model: openai/gpt-5.4
+model: openai-codex/gpt-5.4-mini
 tools: read,write
 domain: []
 ---
